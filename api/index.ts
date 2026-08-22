@@ -12,7 +12,10 @@ const connectDB = async () => {
   }
   
   try {
-    await mongoose.connect(config.mongodbUri);
+    await mongoose.connect(config.mongodbUri, {
+      serverSelectionTimeoutMS: 5000, // Fail fast if DB is unreachable
+      bufferCommands: false, // Don't buffer commands if not connected
+    });
     isConnected = true;
     console.log("MongoDB connected (Serverless)");
   } catch (error) {
